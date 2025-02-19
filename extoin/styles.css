@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: max-content;
+    border: dashed;
+    background: #84c171;
+    border-radius: 12px;
+}
+
+
+input {
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.btn {
+    font-size: 13px;
+    margin: 21px;
+    padding: 2px;
+    /* background: #8d9ef9; */
+}
+
+

@@ -1,0 +1,8 @@
+{
+    "terminal.integrated.cursorStyle": "line",
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 16,
+    "files.autoSaveDelay": 100,
+    "terminal.integrated.fontSize": 15,
+    "terminal.integrated.fontFamily": ""
+}

@@ -1,0 +1,85 @@
+/* styles.css */
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+textarea {
+    width: 90%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.name {
+    background-color: rgb(158, 171, 230);
+    display: flex;
+    font-size: large;
+    justify-content: space-evenly;
+}
+
+.btn {
+    background-color: #255567;
+    text-align: center;
+    font-size: large;
+    cursor: pointer;
+    color: antiquewhite;
+    border: solid 1px;
+    border-color: black;
+    border-radius: 3px;
+}
+
+.totalcounts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+    font-size: large;
+}
+
+.remaincounts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+    font-size: large;
+}
+
+.lastcounts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+    font-size: large;
+}
+
+.lastcountsp {
+    margin: 0;
+}
+
+.forcounts {
+    display: flex;
+}
+
+.setdesplay {
+    text-align: center;
+    margin: 10px;
+    color: rgb(41, 131, 5);
+}
+
+.startbox {
+    display: flex;
+    justify-content: center;
+    gap: 11px;
+    font-size: 16px;
+}
+
+

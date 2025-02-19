@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "HT AUTO CLICKER",
+    "version": "1.0",
+    "description": "auto click and count how many clicks.",
+    "permissions": ["scripting", "activeTab", "storage", "tabs"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  

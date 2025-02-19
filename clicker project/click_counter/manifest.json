@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "XPath Finder",
+    "version": "1.0",
+    "description": "Click on any location to get the XPath of an element.",
+    "permissions": ["scripting", "activeTab", "storage"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  

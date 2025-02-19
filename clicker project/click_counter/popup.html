@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>XPath Finder</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+    }
+
+    #xpath {
+      font-size: 14px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>CLICK COUNTER AND SETER:</h3>
+  <div class="mainbox">
+    <div class="forcounts">
+      <button id="minus">-</button>
+      <button id="plus">+</button>
+      <input id="setnum" type="number"  max="4">
+      <button id="set">SET</button>
+      <button id="rest">rest</button>
+    </div>
+    <div class="setdesplay" id="setdesplay" ></div>
+    <div class="totalcounts">
+      <div>Total Counts</div>
+      <div class="countbox" id="countbox">0</div>
+    </div>
+    <div class="remaincounts">
+      <div>Remain Counts</div>
+      <div id="remainbox">0</div>
+    </div>
+    <div class="lastcounts">
+      <p class="lastcountsp">last counts this month<span class="lastcounts1">:</span></p>
+      <div id="lastcount">0</div>
+    </div>
+    <div class="startbox">
+      <div>ready to </div>
+      <button id="start">start</button>
+      <button id="stop">stop</button>
+    </div>
+  </div>
+  <div class="btn" id="btn"> click here to create a window</div>
+  <!-- <div class="name">
+    name : <div id="name"></div>
+  </div> -->
+  <!-- <textarea id="xpath" rows="6" cols="40" readonly></textarea> -->
+</body>
+<script src="popup.js"></script>
+
+</html>

@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Extoin",
+  "version": "1.0",
+  "description": "Upload an Excel file and row data feed in input fild directry ",
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "storage",
+    "tabs",
+    "windows"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.svg"
+  }
+}
