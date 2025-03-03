@@ -12,6 +12,14 @@ function getInputFild(params) {
 }
 getInputFild()
 
+let submitbnt=[]
+document.querySelectorAll('input[type="submit"]').forEach((input) => {
+    console.log(input)
+    submitbnt.push(input.id)
+
+});
+
+
 
 chrome.runtime.onMessage.addListener(function (request) {
     console.log(request);
@@ -21,7 +29,8 @@ chrome.runtime.onMessage.addListener(function (request) {
         let fatherNamefild = document.getElementById(input_ids[1])
         namefild.value = request.data.AplicantName
         fatherNamefild.value = request.data.fatherName
-        searchtbn.click()
+        let sumbbtn=document.getElementById(submitbnt[0])
+        sumbbtn.click()
     }
 
     if (request.isEngen === "syncHendler") {
@@ -32,8 +41,8 @@ chrome.runtime.onMessage.addListener(function (request) {
 });
 
 document.addEventListener("click", (event) => {
-    let id = event.target.id
     if (event.target.id) {
+        let id = event.target.id
         let namefild = document.getElementById(id)
         namefild.addEventListener("input", (event) => {
             let accname = event.target.value
