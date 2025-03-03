@@ -7,3 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+document.getElementById("openLinkBtn").addEventListener("click", function() {
+  chrome.tabs.create({ url: "https://www.heliusdev.in/" });
+});

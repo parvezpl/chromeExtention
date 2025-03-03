@@ -1,0 +1,15 @@
+{
+  "name": "extoin",
+  "version": "1.0.0",
+  "main": "background.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

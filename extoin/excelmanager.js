@@ -19,7 +19,7 @@ export async function excelmanager(params) {
     })
 
     function displayTable(rows) {
-        console.log(rows);
+        // console.log(rows);
         let tableHead = document.querySelector("#dataTable thead");
         let tableBody = document.querySelector("#dataTable tbody");
         tableHead.innerHTML = "";
@@ -57,7 +57,8 @@ export async function excelmanager(params) {
                 const tabIdsList = getActiveWinData()
                 try {
                     chrome.runtime.sendMessage({ engen: "excelmanager", data: rows[i], tabIds: tabIdsList });
-                    tr.style.backgroundColor = "green";
+                    tr.style.backgroundColor = "#195127";
+                    tr.style.color="white"
                 } catch (error) {
                     console.log(error);
                 }
@@ -83,7 +84,7 @@ function getAllWindowsData(params) {
                         inputbtn.setAttribute("id", tab.id)
                         inputbtn.setAttribute("class", "checkbox")
                         inputbtn.addEventListener("change", function () {
-                            console.log("checked", url.hostname, this.checked)
+                            // console.log("checked", url.hostname, this.checked)
                             chrome.runtime.sendMessage({
                                 engen: "excelmanagerWindowData",
                                 isChecked: this.checked,
@@ -91,6 +92,13 @@ function getAllWindowsData(params) {
                                 hostname: url.hostname
                             });
                         })
+                        let syncId =document.getElementById("sync_data")
+                        console.log(syncId)
+                        syncId.addEventListener("change", ()=>{
+                            console.log("check", syncId.checked)
+                            chrome.runtime.sendMessage({engen:"sync", isSync: syncId.checked})
+                        })
+
                         if (url.hostname !== "newtab" && url.hostname.includes(".")) {
                             const li = document.createElement("li")
                             li.innerHTML = url.hostname
@@ -116,6 +124,7 @@ function getActiveWinData() {
     document.querySelectorAll(".checkbox").forEach((checkbox) => {
         if (checkbox.checked) {
             activeWinList.push(Number(checkbox.id))
+            chrome.storage.local.set({ checkedwind: activeWinList })
         }
     })
     return activeWinList

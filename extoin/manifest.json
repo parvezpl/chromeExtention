@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Extoin",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Upload an Excel file and row data feed in input fild directry ",
   "permissions": [
     "scripting",

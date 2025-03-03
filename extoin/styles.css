@@ -3,7 +3,7 @@ body {
     text-align: center;
     width: max-content;
     border: dashed;
-    background: #84c171;
+    background: #b5dad6;
     border-radius: 12px;
 }
 
@@ -23,11 +23,45 @@ td {
     padding: 5px;
 }
 
-.btn {
-    font-size: 13px;
-    margin: 21px;
+.btn  {
+    font-size: 18px;
+    margin: 2px;
     padding: 2px;
     /* background: #8d9ef9; */
+    border-radius: 5px;
 }
 
+button {
+    background-color: rgb(8, 57, 146);
+    color: wheat;
+    border: 1px rgb(8, 255, 90) solid;
+    border-radius: 4px;
+    box-shadow: 1px 2px 4px rgba(48, 32, 32, 0.1), 4px 5px 2px rgba(15, 5, 5, 0.08);
+    
+}
 
+.btn_box {
+    padding: 10px;
+}
+
+h3{
+    margin: 4px;
+    padding: 0;
+}
+
+.user {
+    display: inline-flex;
+    align-items: center;
+}
+
+.userType {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(32, 103, 124);
+    height: 25px;
+    color: rgb(209, 221, 219);
+    padding: 4px;
+    align-items: center;
+    border: 1px rgb(236, 238, 209) solid;
+    font-weight: 800;
+}

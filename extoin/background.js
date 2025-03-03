@@ -4,7 +4,9 @@
 let nameData = {
     AplicantName: "",
     fatherName: "",
-    thana: ""
+    thana: "", 
+    element_id:"",
+    isSync:false
 }
 
 let setTabid = true
@@ -30,7 +32,6 @@ chrome.runtime.onMessage.addListener(function (request) {
         sendSmsFunction("content", nameData, request)
     }
 
-    
     if (request.engen === "excelmanagerWindowData") {
         // console.log(request)
         if (request.isChecked) {
@@ -38,8 +39,22 @@ chrome.runtime.onMessage.addListener(function (request) {
         } else {
             windowsId = windowsId.filter(id => id !== request.tabId)
         }
-        console.log(windowsId)
+        // console.log(windowsId)
     }
+
+    if (request.engen === "for_win_conection") {
+        // console.log("back sender ")
+        if (nameData.isSync) {
+            nameData.AplicantName=request.data.accname
+            nameData.element_id=request.data.element_id
+            syncSender()
+        }
+    }
+    if (request.engen ==="sync") {
+        console.log(request)
+        nameData.isSync=request.isSync
+    }
+
 });
 
 
@@ -48,7 +63,7 @@ function sendSmsFunction(isEngen, nameData, request = null) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (isEngen === "content") {
             request.tabIds.forEach(id => {
-                chrome.tabs.sendMessage(Number(id), { isEngen: "datasender", data: nameData })
+                chrome.tabs.sendMessage(Number(id), { isEngen: "datasender", data:nameData })
             })
         }
     })
@@ -63,7 +78,7 @@ function newWindows(message) {
             {
                 url: "newpopup.html",
                 type: "popup",
-                width: 400,
+                width: 900,
                 height: 500,
                 focused: true
             },
@@ -71,6 +86,16 @@ function newWindows(message) {
     }
 }
 
+
+
+
+function syncSender(){
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        windowsId?.forEach(id => {
+                chrome.tabs.sendMessage(Number(id), { isEngen: "syncHendler", data: nameData })
+            })
+    })
+}
 
 
 // if (setTabid) {

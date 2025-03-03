@@ -1,19 +1,39 @@
-
 body {
-    background: #bbcbb8;
-  
+    background: #2f3030;
+    color: rgb(214, 219, 219);
 }
 
 h2 {
     margin: 3px;
 }
 
-.inputbox{ 
+.inputbox {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    padding: 3px;
-    background: #535353;
+    padding: 9px;
+    background: #132430;
     border-radius: 2px;
+    border: 1px rgb(45, 90, 53) solid;
+
+
+}
+
+.inputbox :nth-child(1) {
+    gap: 27px;
+    display: flex;
+
+}
+
+#fileInput {
+    display: flex;
+    gap: 1px;
+    font-size: large;
+}
+
+.windowslist {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    grid-template-rows: repeat(3, auto);
 }
