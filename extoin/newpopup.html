@@ -18,11 +18,17 @@
             <input type="file" id="fileInput" accept=".xls,.xlsx">
         </div>
         <div>
-            <label for="sync_data">sync data </label>
-            <input type="checkbox" id="sync_data">
+            <div class="levelbox">
+                <label for="sync_data">sync data </label>
+                <input type="checkbox" id="sync_data">
+            </div>
+            <div class="levelbox">
+                <label for="set_input_fild">set input field </label>
+                <input type="checkbox" id="set_input_fild">
+            </div>
         </div>
     </div>
-
+    <h3>first off all upload a excel seet. now which column do you want to use, checked this colum first</h3>
     <table id="dataTable">
         <thead></thead>
         <tbody></tbody>
@@ -30,6 +36,7 @@
     <script src="xlsx.full.min.js"></script>
     <!-- <script type="module" src="popup.js"></script> -->
     <script type="module" src="excelmanager.js"></script>
+    <script type="module" src="apiPopup.js"></script>
 </body>
 
 </html>

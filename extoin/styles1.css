@@ -37,3 +37,7 @@ h2 {
     grid-template-columns: repeat(3, minmax(100px, 1fr));
     grid-template-rows: repeat(3, auto);
 }
+.levelbox {
+    display: flex;
+    justify-content: space-between;
+}

@@ -4,6 +4,7 @@
   "version": "1.2",
   "description": "Upload an Excel file and row data feed in input fild directry ",
   "permissions": [
+    "background",
     "scripting",
     "activeTab",
     "storage",
@@ -15,12 +16,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["contentlogic.js", "content.js"]
     }
   ],
   "action": {
