@@ -1,12 +1,12 @@
 
 export async function excelmanager(params) {
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded",  () => {
         document.getElementById("fileInput").addEventListener("change", function (event) {
             let file = event.target.files[0];
             if (!file) return;
             let reader = new FileReader();
             reader.readAsArrayBuffer(file);
-            reader.onload = function (e) {
+            reader.onload = async function (e) {
                 let data = new Uint8Array(e.target.result);
                 let workbook = XLSX.read(data, { type: "array" });
                 let sheetName = workbook.SheetNames[0]; // Get first sheet
@@ -14,10 +14,11 @@ export async function excelmanager(params) {
 
                 let rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                 try {
-                    chrome.storage.local.set({ "exceldata": rows })
+                    await chrome.storage.local.set({ "exceldata": rows })
                 } catch (error) {
                     throw error
                 }
+                console.log(rows)
                 displayTable(rows);
             };
         });
@@ -30,7 +31,7 @@ function displayTable(rows) {
     tableHead.innerHTML = "";
     tableBody.innerHTML = "";
 
-    if (rows.length === 0) return;
+    if (rows?.length === 0) return;
     // Create table header
     let headerRow = document.createElement("tr");
     headerRow.style.background = "#0e1d33"
@@ -107,8 +108,10 @@ function displayTable(rows) {
 excelmanager()
 
 try {
-    chrome.storage.local.get(["exceldata"], (res) => {
-        displayTable(res.exceldata)
+    await chrome.storage.local.get(["exceldata"], (res) => {
+        if (res.exceldata) {
+            displayTable(res.exceldata)
+        }
     })
 } catch (error) {
     throw error

@@ -8,7 +8,7 @@ chrome.tabs.onActivated.addListener(activeInfo => {
             hostname = new URL(tab.url).hostname;
             try {
                 await chrome.storage.local.get('pageData',async (res)=>{
-                    pageData=res.pageData
+                    pageData=res.pageData || []
                 } )
                await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname })
             } catch (error) {
@@ -24,7 +24,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         hostname = new URL(tab.url).hostname;
         try {
             await chrome.storage.local.get('pageData',async (res)=>{
-                pageData=res.pageData
+                pageData=res.pageData || []
             } )
             await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname })
         } catch (error) {
@@ -88,6 +88,7 @@ chrome.runtime.onMessage.addListener(function (request) {
 
     if (request.engen === "for_win_conection") {
         console.log("back sender", request)
+        console.log("ckeck pagedata", pageData)
         // check isSync is true then work 
 
         pageData.forEach(object=>{
@@ -105,6 +106,7 @@ chrome.runtime.onMessage.addListener(function (request) {
 
     // exel apge
     if (request.engen === "excel_setting") {
+        console.log("excel_setting", request)
         store_excel_setting(request)
     }
 
@@ -155,6 +157,7 @@ function syncSender(request) {
 
 
 async function store_excel_setting(request) {
+    console.log(request)
     await chrome.storage.local.get('pageData', async (res) => {
         console.log(Object.keys(res))
         if (Object.keys(res)[0] === "pageData") {
