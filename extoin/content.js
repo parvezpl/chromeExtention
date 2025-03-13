@@ -1,7 +1,6 @@
 console.log("content.jss");
 
 
-
 let input_ids = []
 function getInputFild(params) {
     document.querySelectorAll('input[type="text"]:not([type="hidden"]').forEach((input) => {
@@ -22,7 +21,7 @@ document.querySelectorAll('input[type="submit"]').forEach((input) => {
 
 
 chrome.runtime.onMessage.addListener(function (request) {
-    console.log(request);
+    // console.log(request);
     if (request.isEngen === "datasender") {
         console.log("input id", input_ids)
         let namefild = document.getElementById(input_ids[0])
@@ -39,18 +38,60 @@ chrome.runtime.onMessage.addListener(function (request) {
         inputbox.value = request.data.accname
     }
 
+    if (request.action === "excel_head_value_input_setup") {
+        console.log("hello", request)
+        Set_value_for_input(request.isInputValueSetup)
+    }
+
+    if (request.isEngen === "ExeelRowsData") {
+
+        console.log(request)
+        let hostname = window.location.hostname
+        request.setInputData.forEach((element) => {
+            if (hostname === element.hostname) {
+                let paths = element.path
+                paths.forEach((path) => {
+                    Object.keys(request.cellData).forEach((key) => {
+                        if (key === path.type) {
+                            let inputElement = getElementByXpath(path.xpath)
+                            inputElement.value = request.cellData[key]
+                        }
+                    }
+                    )
+                })
+            }
+        })
+    }
+
 });
+
+function getElementByXpath(path) {
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
 
 document.addEventListener("click", (event) => {
     if (event.target.id) {
+
+        // set input what us want to set for copy
+        Set_value_for_input(Set_value_for_input_is_active)
+        // console.log(Set_value_for_input_is_active)
+        if (Set_value_for_input_is_active) {
+            console.log("hello")
+            // Set_value_for_input(Set_value_for_input_is_active)
+        }
+
         let id = event.target.id
         let namefild = document.getElementById(id)
-        namefild.addEventListener("input", async (event) => {
-            let accname = event.target.value
-            let hostname =window.location.hostname
-            console.log(accname)
-            await chrome.runtime.sendMessage({ engen: "for_win_conection", data: { accname: accname, element_id: id, hostname } });
-        })
+        // console.log(namefild)
+        if (namefild) {
+            namefild.addEventListener("input", async (event) => {
+                let accname = event.target.value
+                let hostname = window.location.hostname
+                console.log(accname)
+                await chrome.runtime.sendMessage({ engen: "for_win_conection", data: { accname: accname, element_id: id, hostname } });
+                return
+            })
+        }
     }
 })
 
@@ -58,7 +99,6 @@ document.addEventListener("click", (event) => {
 document.addEventListener("click", () => {
     const res = getTableColumn()
     if (res.class) {
-
         const table = document.querySelector(`.${res.class}`)
         const rows = table.querySelectorAll('tbody tr')
         let tableData = [];
@@ -68,15 +108,14 @@ document.addEventListener("click", () => {
             const columns = row.querySelectorAll('td, th')
             columns.forEach((col, index) => {
                 console.log(col, index)
-                if (res.colIndex===index) {
+                if (res.colIndex === index) {
                     let text = col.querySelector('span') ? col.querySelector('span').textContent.trim() : col.textContent.trim();
                     rowData.push(text);
                     let elemnts = col.querySelector('span') ? col.querySelector('span') : col;
-                    elemnts.style.background="red"
+                    elemnts.style.background = "red"
                 }
-                // // console.log(elemnts)
             });
-        
+
             tableData.push(rowData);
             if (!rowData.length) {
             }

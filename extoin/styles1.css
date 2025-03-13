@@ -33,11 +33,30 @@ h2 {
 }
 
 .windowslist {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(100px, 1fr));
-    grid-template-rows: repeat(3, auto);
+    display: flex
+    ;
+        position: absolute;
+        min-height: min-content;
+        flex-direction: column;
+        background: black;
+        margin: 5px;
+        padding: 6px;
+        top: 97px;
+        box-shadow: 3px 2px 11px;
+        border: 1px #1ee17c solid;
 }
 .levelbox {
     display: flex;
     justify-content: space-between;
+}
+
+.sideBar {
+    cursor: pointer;
+    position: absolute;
+    top: -8px;
+    left: 4px;;
+    width: 27px;
+    height: 20px;
+    color: #e7f3e9;
+    font-size: 27px;
 }

@@ -10,7 +10,7 @@ chrome.tabs.onActivated.addListener(activeInfo => {
                 await chrome.storage.local.get('pageData',async (res)=>{
                     pageData=res.pageData || []
                 } )
-               await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname })
+               await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname, id:tab.id })
             } catch (error) {
                null
             }
@@ -26,7 +26,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             await chrome.storage.local.get('pageData',async (res)=>{
                 pageData=res.pageData || []
             } )
-            await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname })
+            await chrome.runtime.sendMessage({ action: "update_excel_seting", hostname, id:tab.id })
         } catch (error) {
             null
         }
@@ -55,27 +55,32 @@ const sirName = ["मोहम्मद", "श्री", "स्वर्गी
 let windowsId = [];
 chrome.runtime.onMessage.addListener(function (request) {
     newWindows(request)
-    if (request.engen === "excelmanager") {
-        let dataArray = request.data;
-        fatherTitle.forEach(title => {
-            if (dataArray[3].includes(title)) {
-                const accusName = String(dataArray[3].split(title)[1].trim().split(" ")[0]);
-                const accusfater = String(dataArray[3].split(title)[0].split(" ")[0]);
-                if (sirName.includes(accusName)) {
-                    nameData.fatherName = String(dataArray[3].split(title)[1].trim().split(" ")[1])
-                    if (sirName.includes(accusfater)) {
-                        nameData.AplicantName = String(dataArray[3].split(title)[0].split(" ")[1]);
-                        return
-                    }
-                    return
-                }
+    // if (request.engen === "ExeelRowsData") {
+    //     let dataArray = request.data;
+    //     fatherTitle.forEach(title => {
+    //         if (dataArray[3].includes(title)) {
+    //             const accusName = String(dataArray[3].split(title)[1].trim().split(" ")[0]);
+    //             const accusfater = String(dataArray[3].split(title)[0].split(" ")[0]);
+    //             if (sirName.includes(accusName)) {
+    //                 nameData.fatherName = String(dataArray[3].split(title)[1].trim().split(" ")[1])
+    //                 if (sirName.includes(accusfater)) {
+    //                     nameData.AplicantName = String(dataArray[3].split(title)[0].split(" ")[1]);
+    //                     return
+    //                 }
+    //                 return
+    //             }
 
-                nameData.fatherName = accusName
-                nameData.AplicantName = accusfater
-                nameData.thana = dataArray[1];
-            }
-        });
-        sendSmsFunction("content", nameData, request)
+    //             nameData.fatherName = accusName
+    //             nameData.AplicantName = accusfater
+    //             nameData.thana = dataArray[1];
+    //         }
+    //     });
+    //     sendSmsFunction("content", nameData, request)
+    // }
+
+    if (request.engen === "ExeelRowsData") {
+        console.log(request)
+        sendSmsFunction("ExeelRowsData", null, request)
     }
 
     if (request.engen === "excelmanagerWindowData") {
@@ -114,11 +119,19 @@ chrome.runtime.onMessage.addListener(function (request) {
 
 
 
-function sendSmsFunction(isEngen, nameData, request = null) {
+function sendSmsFunction(isEngen, nameData=null, request = null) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (isEngen === "content") {
             request.tabIds.forEach(id => {
                 chrome.tabs.sendMessage(Number(id), { isEngen: "datasender", data: nameData })
+            })
+        }
+        if (isEngen === "ExeelRowsData") {
+            console.log(request)
+            chrome.storage.local.get("setInputData" , (res) => {
+                request.tabIds.forEach(id => {
+                    chrome.tabs.sendMessage(Number(id), { isEngen: "ExeelRowsData", cellData:request.cellData, setInputData:res.setInputData })
+                })
             })
         }
     })

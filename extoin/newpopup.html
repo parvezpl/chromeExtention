@@ -9,14 +9,16 @@
 </head>
 
 <body id="body">
-    <div class="windowslist" id="windowslist">
-
+    <div class="windowslist">
+        <span class="sideBar" id="sideBar">=</span>
+        <div
+            style="font-size: 7px; font-weight: 700; border-bottom: 1px white solid; text-align: center; margin-bottom: 4px; margin-left: 21px;">
+            OPEN TABS</div>
+        <div id="windowslist">
+        </div>
     </div>
     <div class="inputbox">
-        <div>
-            <h2>Upload an Excel File</h2>
-            <input type="file" id="fileInput" accept=".xls,.xlsx">
-        </div>
+
         <div>
             <div class="levelbox">
                 <label for="sync_data">sync data </label>
@@ -28,11 +30,27 @@
             </div>
         </div>
     </div>
-    <h3>first off all upload a excel seet. now which column do you want to use, checked this colum first</h3>
-    <table id="dataTable">
-        <thead></thead>
-        <tbody></tbody>
-    </table>
+    <h4 style="text-align: center; padding: 0%; margin: 5px; color: #050529; background-color: #026d70;">first off all
+        upload a excel seet. now which column do you want to use, checked this colum first</h4>
+    <div
+        style="display: flex; gap: 10px; justify-content: center; align-items: center; border-bottom: 1px rgb(18, 14, 65) solid; font-size: 10px;">
+        <h2>Upload an Excel File</h2>
+        <input
+            style="background-color: #0a0e0d; color: rgb(192, 191, 191); border: 1px solid #050b0d; padding: 5px; border-radius: 5px;"
+            type="file" id="fileInput" accept=".xls,.xlsx">
+    </div>
+    <div class="" style="display: flex; gap: 10px; justify-content: center;">
+        <div>
+            Enable Set Input Field
+        </div>
+        <button class="inputButton" id="inputButton">Enable</button>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+        <table id="dataTable" style="background-color: #050b0d;">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <script src="xlsx.full.min.js"></script>
     <!-- <script type="module" src="popup.js"></script> -->
     <script type="module" src="excelmanager.js"></script>
