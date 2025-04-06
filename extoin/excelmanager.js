@@ -1,3 +1,6 @@
+const relationtitle = ["पिता", "पुत्र", "पुत्री", " सी/ओ", "पति", "पत्नी", "पत्नी", "माता",
+    "बेटा", "बेटी", "पति", "पत्नी", "बेटी", "C/O", "D/O",
+    "S/O", "W/O", "H/O", "C/O", "D/O", "S/O"];
 
 export async function excelmanager(params) {
     document.addEventListener("DOMContentLoaded", () => {
@@ -23,7 +26,7 @@ export async function excelmanager(params) {
         });
     })
 }
-let data = {delete: "delete"}
+let data = { delete: "delete" }
 function displayTable(rows) {
     let tableHead = document.querySelector("#dataTable thead");
     let tableBody = document.querySelector("#dataTable tbody");
@@ -37,8 +40,28 @@ function displayTable(rows) {
         let th = document.createElement("th");
         // th.style.display="flex"
         th.style.minWidth = "45px"
+
+        let thdiv = document.createElement("div")
+        thdiv.style.display = "flex"
+        thdiv.style.justifyContent = "center"
+        thdiv.className = "setting"
+
         let levl = document.createElement("label")
         levl.setAttribute("for", id)
+
+        let icondiv = document.createElement("div")
+        icondiv.style.cursor = "pointer"
+        icondiv.id = id
+        icondiv.className = "icondiv"
+
+        let icon = document.createElement("i")
+        icon.className = "fa fa-cog"
+        icon.style.marginLeft = "5px"
+        icon.style.color = "white"
+        // icon.style.cursor="pointer"
+        icon.id = id
+        icondiv.appendChild(icon)
+
 
         let checkbox_head = document.createElement("input")
         checkbox_head.type = "checkbox"
@@ -46,34 +69,33 @@ function displayTable(rows) {
         checkbox_head.className = "head_checkbox"
         checkbox_head.style.display = "none"
         levl.textContent = header;
-        th.appendChild(levl)
-        th.appendChild(checkbox_head);
+        thdiv.appendChild(levl)
+        thdiv.appendChild(checkbox_head);
+        thdiv.appendChild(icondiv)
+        th.appendChild(thdiv)
         headerRow.appendChild(th);
 
         checkbox_head.addEventListener("change", async (e) => {
-            console.log("hello", e.target.checked)
+            // chrome.storage.local.get(['setHeaderIsChecked'], async (res) => {
+            //     if (!res.setHeaderIsChecked) {
+            //         res.setHeaderIsChecked = {}
+            //     }
+            //     res.setHeaderIsChecked[id] = checkbox_head.checked
+            //     await chrome.storage.local.set({ "setHeaderIsChecked": res.setHeaderIsChecked })
+            // })
+            // chrome.storage.local.set({ "setHeaderIsChecked": { [id]: checkbox_head.checked } })
             if (!checkbox_head.checked) {
                 await chrome.storage.local.get(['setXlHeader'], async (res) => {
-                    console.log("not chekd", res.setXlHeader)
                     delete res.setXlHeader[id]
                     await chrome.storage.local.set({ "setXlHeader": res.setXlHeader })
                 })
-
                 return
             }
-            const associatedLabel = document.querySelector(`label[for="${id}"]`);
-            if (associatedLabel) {
-                let values = associatedLabel.textContent
-                await chrome.storage.local.get(['setXlHeader'], async (res) => {
-                    res.setXlHeader[id] = values
-                    data = res.setXlHeader
-                    await chrome.storage.local.set({ "setXlHeader": res.setXlHeader })
-                })
-                chrome.storage.local.set({ "setXlHeader": data })
-            }
+            // get
+            getInputNameForInputbox(id)
         })
-
     });
+
     chrome.storage.local.set({ "setXlHeader": data })
     tableHead.appendChild(headerRow);
 
@@ -94,30 +116,122 @@ function displayTable(rows) {
             tr.appendChild(td);
         });
         tableBody.appendChild(tr);
+
+        // row data send at click 
         tr.addEventListener("click", function (event) {
-            // console.log(rows[i]);
-            const tabIdsList = getActiveWinData()
-            try {
-                let cellData = {}
-                rows[i].forEach((cell, idex) => {
-                    Object.keys(data).forEach((key) => {
-                        if (Number(key)===idex) {
-                            cellData[data[key]] = cell
-                        }
-                    })
-                });
-                console.log(cellData)
-                chrome.runtime.sendMessage({ engen: "ExeelRowsData", data: rows[i], tabIds: tabIdsList, cellData });
-                tr.style.backgroundColor = "#195127";
-                tr.style.color = "white"
-            } catch (error) {
-                console.log(error);
-            }
+            let cellData = {}
+            document.querySelectorAll(".head_checkbox").forEach((checkbox_head_item) => {
+                if (checkbox_head_item.checked) {
+                    let cell = rows[i][Number(checkbox_head_item.id)]
+                    const tabIdsList = getActiveWinData()
+                    try {
+                        Object.keys(data).forEach((key) => {
+                            if (Number(key) === Number(checkbox_head_item.id)) {
+                                chrome.storage.local.get('excelHeaderSettingData', (res) => {
+                                    if (res.excelHeaderSettingData) {
+                                        res.excelHeaderSettingData?.forEach((header) => {
+                                            if (Number(checkbox_head_item.id) === Number(header.id)) { // prevent only selected cell interaction
+                                                if (header.issplit) {
+                                                    if (relationtitle.includes(header.splitby)) {
+                                                        relationtitle.forEach((title) => {
+                                                            if (cell.includes(title)) {
+                                                                let item = cell.split(title)
+                                                                data[key].forEach((itemName, indexid) => {
+                                                                    cellData[itemName] = item[indexid]
+                                                                })
+                                                            }
+                                                        })
+                                                    } else {
+                                                        let item = cell.split(header.splitby)
+                                                        data[key].forEach((itemName, indexid) => {
+                                                            cellData[itemName] = item[indexid]
+                                                        })
+                                                    }
+                                                }
+                                                if (header.issplit === false) {
+                                                    cellData[data[key]] = cell
+                                                }
+                                            }
+                                        })
+                                    } else {
+                                        chrome.storage.local.set({ excelHeaderSettingData: [] })
+                                    }
+                                })
+                            }
+                        })
+
+                        // define to which one data sent to background .............
+                        // check which head checked for send data 
+                        let collectdata = []
+                        chrome.storage.local.get("setXlHeader", (res) => {
+                            Object.keys(res.setXlHeader).forEach((key) => {
+                                if (Number(key)) {
+                                    collectdata.push(rows[i][Number(key)])
+                                }
+                            })
+                            // if setting for only first word filter sentent 
+                            const firstword= document.getElementById("firstWord")
+                            if (firstword.checked) {
+                                Object.keys(cellData).forEach(key=>{
+                                    cellData[key]=cellData[key].trim().split(" ")[0]
+                                })
+                            }
+
+                            chrome.runtime.sendMessage({ engen: "ExeelRowsData", data: collectdata, tabIds: tabIdsList, cellData });
+                            tr.style.backgroundColor = "#195127";
+                            tr.style.color = "white"
+
+                        })
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            })
+            cellData = {}
         });
     }
 }
 
 excelmanager()
+
+async function getInputNameForInputbox(id) {
+    const associatedLabel = document.querySelector(`label[for="${id}"]`);
+    if (associatedLabel) {
+        let values = associatedLabel.textContent
+        await chrome.storage.local.get(['excelHeaderSettingData'], async (res) => {
+            if (res.excelHeaderSettingData) {
+                res.excelHeaderSettingData.forEach(async (header) => {
+                    if (Number(header.id) === Number(id)) {
+
+                        if (header.issplit) {
+                            let headersname = []
+                            await chrome.storage.local.get(['setXlHeader'], async (res) => {
+                                for (let index = 1; index < 3; index++) {
+                                    headersname.push(values + index)
+                                }
+                                res.setXlHeader[id] = headersname
+                                data = res.setXlHeader
+                                await chrome.storage.local.set({ "setXlHeader": res.setXlHeader })
+   
+                            })
+                        } else {
+                            await chrome.storage.local.get(['setXlHeader'], async (res) => {
+                                res.setXlHeader[id] = values
+                                data = res.setXlHeader
+                                chrome.storage.local.set({ "setXlHeader": res.setXlHeader })
+
+                            })
+
+                        }
+                    }
+                })
+            }
+        })
+
+    }
+
+}
+
 
 try {
     await chrome.storage.local.get(["exceldata"], (res) => {
@@ -144,7 +258,6 @@ function getAllWindowsData(params) {
                         inputbtn.setAttribute("id", tab.id)
                         inputbtn.setAttribute("class", "checkbox")
                         inputbtn.addEventListener("change", function () {
-                            // console.log("checked", url.hostname, this.checked)
                             chrome.runtime.sendMessage({
                                 engen: "excelmanagerWindowData",
                                 isChecked: this.checked,
@@ -195,21 +308,32 @@ export function setHeadInputButton(params) {
     inputButton.addEventListener('click', function () {
         let head_checkbox = document.querySelectorAll(".head_checkbox")
         let windowsIdList = getActiveWinData()
-        // console.log("button clicked", head_checkbox)
         if (inputButton.innerHTML === "Enable") {
             inputButton.innerHTML = "Disable"
             isInputValueSetup = true
             head_checkbox.forEach((resin) => {
-                console.log(resin)
                 resin.style.display = "table-row"
-            })
+                // chrome.storage.local.get("setHeaderIsChecked", (res) => {
+                //     if (res.setHeaderIsChecked) {
+                //         resin.checked = res.setHeaderIsChecked[resin.id]
+                //         if (resin.checked) {
+                //             getInputNameForInputbox(resin.id)
+                //         }
+                //     } else {
+                //         resin.checked = false
+                //     }
+                // })
 
+            })
+            chrome.storage.local.set({ "isInputValueSetup": true })
         } else {
             inputButton.innerHTML = "Enable"
             isInputValueSetup = false
             head_checkbox.forEach((resin) => {
                 resin.style.display = "none"
+
             })
+            chrome.storage.local.set({ "isInputValueSetup": false })
         }
 
         windowsIdList.forEach((id) => {

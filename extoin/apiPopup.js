@@ -29,7 +29,6 @@ export async function update_excel_setting(storedata) {
     syncId.checked = storedata.isSync
     syncId.addEventListener("change", async () => {
         storedata.isSync = syncId.checked
-        console.log("syncId", storedata)
         await chrome.storage.local.set({ "checkedState": storedata })
         await chrome.runtime.sendMessage({ engen: "excel_setting", storedata })
     })
@@ -41,12 +40,10 @@ excelSetting()
 
 chrome.runtime.onMessage.addListener(async function (request) {
     if (request.action === 'update_excel_seting') {
-        console.log("page change", request)
         let set_input_fild = document.getElementById("set_input_fild")
         let syncId = document.getElementById("sync_data")
         await chrome.storage.local.get('pageData', (res) => {
             if (res.pageData) {
-                console.log(res.pageData)
                 let isavlable = false
                 res.pageData.forEach(data => {
                     if (data.hostname === request.hostname) {
@@ -94,7 +91,6 @@ chrome.runtime.onMessage.addListener(async function (request) {
                     const url = new URL(tab.url);
                     if (url.hostname.includes(".")) {
                         if (li_item.firstChild.innerHTML === url.hostname) {
-                            console.log(li_item.firstChild.innerHTML, "url", url.hostname)
                             ismatch = true
                         }
                     }

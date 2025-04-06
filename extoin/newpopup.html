@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel Viewer</title>
     <link rel="stylesheet" href="styles1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 
 <body id="body">
@@ -30,7 +32,9 @@
             </div>
         </div>
     </div>
-    <h4 style="text-align: center; padding: 0%; margin: 5px; color: #050529; background-color: #026d70;">first off all
+    <h4
+        style="text-align: center; padding: 0%; margin: 5px; color: #050529; background-color: #026d70; margin-left: 78px;">
+        first off all
         upload a excel seet. now which column do you want to use, checked this colum first</h4>
     <div
         style="display: flex; gap: 10px; justify-content: center; align-items: center; border-bottom: 1px rgb(18, 14, 65) solid; font-size: 10px;">
@@ -45,8 +49,18 @@
         </div>
         <button class="inputButton" id="inputButton">Enable</button>
     </div>
-    <div style="display: flex; gap: 10px; justify-content: center;">
+    <div style="display: flex; gap: 10px; justify-content: center; position: relative;">
         <table id="dataTable" style="background-color: #050b0d;">
+            <div class="settinbox" style="display:none">
+                <div >
+                    <label for="cell">cell split form :</label>
+                    <select id="cell" name="cell">
+                        <option value="none">none</option>
+                    </select>
+                </div>
+                <label for="firstWord">take only first word :</label>
+                <input type="checkbox" id="firstWord" name="firstWord" checked>
+            </div>
             <thead></thead>
             <tbody></tbody>
         </table>
@@ -54,6 +68,7 @@
     <script src="xlsx.full.min.js"></script>
     <!-- <script type="module" src="popup.js"></script> -->
     <script type="module" src="excelmanager.js"></script>
+    <script type="module" src="excelHeadSetting.js"></script>
     <script type="module" src="apiPopup.js"></script>
 </body>
 

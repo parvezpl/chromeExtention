@@ -17,7 +17,6 @@ h2 {
     border-radius: 2px;
     border: 1px rgb(45, 90, 53) solid;
 
-
 }
 
 .inputbox :nth-child(1) {
@@ -41,7 +40,7 @@ h2 {
         background: black;
         margin: 5px;
         padding: 6px;
-        top: 97px;
+        top: 43px;
         box-shadow: 3px 2px 11px;
         border: 1px #1ee17c solid;
 }
@@ -59,4 +58,19 @@ h2 {
     height: 20px;
     color: #e7f3e9;
     font-size: 27px;
+}
+
+.settinbox {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    min-width: 200px;
+    margin-top: 10px;
+    align-items: center;
+    background: #1e1e1e;
+    padding: 5px;
+    border: 1px #1ee17c solid;
+    box-shadow: 3px 2px 11px;
+    top: 31px;
+    right: 44%;
 }

@@ -18,6 +18,9 @@ document.querySelectorAll('input[type="submit"]').forEach((input) => {
     submitbnt.push(input.id)
 });
 
+function getElementByXpath(path) {
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
 
 
 chrome.runtime.onMessage.addListener(function (request) {
@@ -34,8 +37,29 @@ chrome.runtime.onMessage.addListener(function (request) {
 
     if (request.isEngen === "syncHendler") {
         console.log(request)
-        let inputbox = document.getElementById(request.data.element_id)
-        inputbox.value = request.data.accname
+        const result = document.evaluate(request.path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        let inputElement = result.singleNodeValue
+        console.log("inputElement", inputElement)
+        inputElement.value = request.data.accname
+        // request.setInputData.forEach((res) => {
+        //     res.path.forEach((path) => {
+        //         if (path.type === request.data.placeholder) {
+        //             const result = document.evaluate(path.xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+        //             let inputElement = result.singleNodeValue
+        //             console.log("inputElement", inputElement, path.xpath)
+        //             inputElement.value = request.data.accname
+        //         }
+        //     })
+        //     // if (res.hostname === window.location.hostname) {
+        //     //     let paths = res.path
+        //     //     paths.forEach((path) => {
+        //     //         if (path.type === request.data.placeholder) {
+        //     //             let inputElement = getElementByXpath(path.xpath)
+        //     //             inputElement.value = request.data.accname
+        //     //         }
+        //     //     })
+        //     // }
+        // })
     }
 
     if (request.action === "excel_head_value_input_setup") {
@@ -44,8 +68,6 @@ chrome.runtime.onMessage.addListener(function (request) {
     }
 
     if (request.isEngen === "ExeelRowsData") {
-
-        console.log(request)
         let hostname = window.location.hostname
         request.setInputData.forEach((element) => {
             if (hostname === element.hostname) {
@@ -68,10 +90,10 @@ chrome.runtime.onMessage.addListener(function (request) {
 function getElementByXpath(path) {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 }
-
+let settimer;
+const delay = 500;
 document.addEventListener("click", (event) => {
     if (event.target.id) {
-
         // set input what us want to set for copy
         Set_value_for_input(Set_value_for_input_is_active)
         // console.log(Set_value_for_input_is_active)
@@ -83,13 +105,16 @@ document.addEventListener("click", (event) => {
         let id = event.target.id
         let namefild = document.getElementById(id)
         // console.log(namefild)
+
         if (namefild) {
             namefild.addEventListener("input", async (event) => {
                 let accname = event.target.value
                 let hostname = window.location.hostname
-                console.log(accname)
-                await chrome.runtime.sendMessage({ engen: "for_win_conection", data: { accname: accname, element_id: id, hostname } });
-                return
+                // console.log({ accname: accname, element_id: id, hostname, placeholder: event.target.placeholder })
+                clearTimeout(settimer)
+                settimer = setTimeout(() => {
+                    chrome.runtime.sendMessage({ engen: "for_win_conection", data: { accname: accname, placeholder: event.target.placeholder } });
+                }, delay)
             })
         }
     }
